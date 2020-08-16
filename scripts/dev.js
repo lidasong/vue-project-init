@@ -27,7 +27,7 @@ const open = async () => {
   })
   ;['SIGINT', 'SIGTERM'].forEach((sig) => {
     process.on(sig, () => {
-      devServer.close();
+      server.close();
       process.exit();
     });
   });

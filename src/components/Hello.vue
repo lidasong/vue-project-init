@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>The Vue Project with element-ui</h2>
+    <h2 :class="['test']">The Vue Project with element-ui</h2>
     <ElButton type="primary" @click.native="resetText">{{ text }}</ElButton>
   </div>
 </template>

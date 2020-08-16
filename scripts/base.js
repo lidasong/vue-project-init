@@ -22,18 +22,22 @@ exports.base = {
     rules: [
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        use: ["vue-loader", "cache-loader"]
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [
+          "thread-loader", 
           {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-env"]
+              presets: ["@vue/babel-preset-app"]
             },
           },
+          {
+            loader: 'cache-loader'
+          }
         ],
       },
       {
@@ -73,4 +77,26 @@ exports.base = {
       template: path.resolve(__dirname, "../public/index.html"),
     }),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: 'async', // 必须三选一： "initial" | "all"(推荐) | "async" (默认就是async)
+      minSize: 30000, // 最小尺寸，30000
+      minChunks: 1, // 最小 chunk ，默认1
+      maxAsyncRequests: 10, // 最大异步请求数， 默认5
+      maxInitialRequests: 6, // 最大初始化请求书，默认3
+      automaticNameDelimiter: '~', // 打包分隔符
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认就是async)
+          test: /vue|moment|lodash/, // 正则规则验证，如果符合就提取 chunk
+          name: 'vendor', // 要缓存的 分隔出来的 chunk 名称
+          minSize: 30000,
+          minChunks: 1,
+          maxAsyncRequests: 5, // 最大异步请求数， 默认1
+          maxInitialRequests: 3, // 最大初始化请求书，默认1
+          reuseExistingChunk: true // 可设置是否重用该chunk
+        }
+      }
+    }
+  }
 };
